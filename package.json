@@ -1,24 +1,28 @@
 {
-	"name": "minecraftd",
-	"module": "src/index.ts",
-	"type": "module",
-	"main": "./index.js",
-	"scripts": {
-		"dev": "bun build src/index.ts --outfile=index.js --target=bun --watch",
-		"build": "bun build src/index.ts --outfile=index.js --target=bun --minify"
-	},
-	"devDependencies": {
-		"@types/bun": "latest"
-	},
-	"peerDependencies": {
-		"typescript": "^5.0.0"
-	},
-	"dependencies": {
-		"chalk": "^5.3.0",
-		"commander": "^11.1.0",
-		"enquirer": "^2.4.1",
-		"lodash": "^4.17.21",
-		"strip-ansi": "^7.1.0",
-		"yaml": "^2.3.4"
-	}
+  "name": "minecraftd",
+  "module": "src/index.ts",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./index.js",
+  "scripts": {
+    "dev": "bun build src/index.ts --outfile=index.js --target=bun --watch",
+    "build": "bun build src/index.ts --outfile=index.js --target=bun --minify",
+    "lint": "eslint src/**/*.ts --fix"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "eslint": "^8.56.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^11.1.0",
+    "enquirer": "^2.4.1",
+    "lodash": "^4.17.21",
+    "strip-ansi": "^7.1.0",
+    "yaml": "^2.3.4"
+  }
 }

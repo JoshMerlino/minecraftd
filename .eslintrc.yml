@@ -1,23 +1,12 @@
 parser: "@typescript-eslint/parser"
 
-plugins:
-  - "react"
-  - "react-hooks"
-
 extends:
   - eslint:recommended
-  - plugin:react/recommended
-  - plugin:react-hooks/recommended
   - plugin:@typescript-eslint/recommended
 
 parserOptions:
   ecmaVersion: 12
   sourceType: module
-  ecmaFeatures:
-    jsx: true
-settings:
-  react:
-    version: detect
 
 # Formatting rules
 rules:
@@ -121,32 +110,3 @@ rules:
 
   # Typescript rules
   "@typescript-eslint/no-unused-vars": warn
-
-  # React rules
-  react/react-in-jsx-scope: off
-  react/jsx-curly-spacing:
-    - warn
-    - when: always
-      children: true
-      spacing:
-        objectLiterals: never
-      allowMultiline: false
-  react/jsx-indent-props:
-    - warn
-    - tab
-  react/jsx-sort-props: warn
-  react/self-closing-comp: warn
-  react/jsx-props-no-multi-spaces: warn
-  react/jsx-equals-spacing: warn
-  react/jsx-max-props-per-line:
-    - warn
-    - maximum: 1
-      when: multiline
-  react/jsx-no-useless-fragment: warn
-  react/jsx-tag-spacing:
-    - warn
-    - closingSlash: never
-      beforeSelfClosing: always
-      afterOpening: never
-      beforeClosing: never
-  react/display-name: off
