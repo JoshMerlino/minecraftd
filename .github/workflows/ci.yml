@@ -83,7 +83,7 @@ jobs:
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
-    if: ${{ needs.version.outputs.did-bump == 'true' }}
+    if: ${{ needs.version.outputs.did-bump == 'true' && github.ref == 'refs/heads/master' }}
     needs:
       - version
       - lint
