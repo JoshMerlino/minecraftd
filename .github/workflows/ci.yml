@@ -1,0 +1,118 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - master
+      - "**"
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Configure git
+        run: |
+          git config --global user.name 'CI/CD'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: "Lint"
+        run: bun lint || true
+
+      - name: Commit changes
+        run: |
+          git add .
+          git reset -- bun.lockb
+          git commit -m "Eslint: fix all" || true
+          git push || true
+
+  version:
+    name: Bump version
+    runs-on: ubuntu-latest
+    outputs:
+      did-bump: ${{ steps.bump.outputs.did-bump }}
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Configure git
+        run: |
+          git config --global user.name 'CI/CD'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Bump version
+        id: bump
+        run: |
+          if git diff --name-only HEAD^ | grep -E 'src/|package.json'; then
+            npm version patch -m "Bump version to %s" || true
+            echo "did-bump=true" >> $GITHUB_ENV
+          fi
+
+      - name: Commit changes
+        run: |
+          git add .
+          git reset -- package-lock.json
+          git commit -m "Bump version" || true
+          git push || true
+
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    if: ${{ needs.version.outputs.did-bump == 'true' }}
+    needs:
+      - version
+      - lint
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Build
+        run: bun run build
+
+      - name: Setup Node for Publishing
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
