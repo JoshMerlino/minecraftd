@@ -2,18 +2,19 @@
   "name": "mcd",
   "module": "src/index.ts",
   "version": "1.0.0",
-  "entry": "d",
   "bin": {
-    "mcd": "index.js"
+    "mcd": "dist/index.js",
+    "minecraftd": "dist/index.js"
   },
   "type": "module",
   "scripts": {
-    "dev": "bun build src/index.ts --outfile=index.js --target=bun --watch",
-    "build": "bun build src/index.ts --outfile=index.js --target=bun --minify",
-    "compile": "bun build src/index.ts --compile --outfile=mcd"
+    "dev": "bun build src/index.ts --outfile=dist/index.js --target=bun --watch",
+    "build": "bun build src/index.ts --outfile=dist/index.js --target=bun --minify && bun build src/index.ts --compile --outfile=dist/minecraftd"
   },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
